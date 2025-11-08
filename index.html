@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>致徐鹏涛的一封信 · 电子信封</title>
+  <meta name="description" content="轻触打开这封写给你的信。">
+  <meta name="theme-color" content="#d6336c">
+  <meta property="og:title" content="致徐鹏涛的一封信 · 电子信封">
+  <meta property="og:description" content="轻触打开这封写给你的信。">
+  <meta property="og:type" content="website">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <style>
+    :root{
+      --bg:#fff5f7;
+      --ink:#2a2a2a;
+      --muted:#6b6b6b;
+      --rose:#d6336c;
+      --rose-2:#ff8fab;
+      --edge:#f2dce6;
+      --card:#ffffff;
+      --shadow:0 10px 30px rgba(0,0,0,.15);
+      --radius:14px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#1a1417;
+        --ink:#f3e9ed;
+        --muted:#c8bfc4;
+        --edge:#3a2831;
+        --card:#221b1f;
+        --shadow:0 10px 30px rgba(0,0,0,.6);
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue","Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
+      color:var(--ink);
+      background: radial-gradient(80% 120% at 20% 20%, #ffe3ec, transparent 60%),
+                  radial-gradient(80% 120% at 80% 0%, #fff0f6, transparent 60%),
+                  var(--bg);
+      display:flex; align-items:center; justify-content:center;
+      padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+    }
+    .wrap{width:min(920px, 96vw); margin:auto; text-align:center;}
+    .title{
+      font-weight:700; letter-spacing:.02em;
+      margin:0 0 10px; font-size:clamp(20px,3.4vw,28px);
+    }
+    .subtitle{color:var(--muted); margin:0 0 20px; font-size:.95rem}
+    .scene{
+      position:relative;
+      width:min(680px, 94vw);
+      margin: 0 auto 10px;
+      perspective:1200px;
+    }
+    .envelope{
+      position:relative; width:100%; height:min(52vh,420px);
+      background:var(--card); border:2px solid var(--edge);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      transform: translateZ(0);
+      transition: transform .6s cubic-bezier(.2,.8,.2,1), height .6s;
+      cursor:pointer;
+    }
+    .envelope:hover{ transform: translateY(-4px) }
+    .flap{
+      position:absolute; inset:0 auto auto 0; width:100%; height:58%;
+      background: linear-gradient(to bottom, #ffe0ea, var(--card) 70%);
+      clip-path: polygon(0 0,100% 0,50% 100%);
+      transform-origin: top center;
+      transform: rotateX(0deg);
+      transition: transform .9s cubic-bezier(.2,.8,.2,1);
+      box-shadow: inset 0 -1px 0 rgba(0,0,0,.04);
+      z-index:3;
+    }
+    .seal{
+      position:absolute; left:50%; top:42%;
+      transform: translate(-50%,-50%);
+      width:86px; height:86px; border-radius:50%;
+      background: radial-gradient(circle at 38% 35%, #ff6b6b, var(--rose));
+      color:#fff; display:grid; place-items:center; 
+      font-size:34px; line-height:1;
+      box-shadow: 0 10px 22px rgba(214,51,108,.35), inset 0 -5px 8px rgba(0,0,0,.16);
+      z-index:4;
+    }
+    .hint{ color:var(--muted); margin:10px 0 22px; font-size:.95rem; }
+    .letter{
+      position:absolute; left:6%; right:6%; bottom:8%; top:50%;
+      background:var(--card);
+      border-radius:12px; padding: 18px 18px 22px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.18);
+      transform: translateY(70%);
+      opacity:0; z-index:2;
+      transition: transform .9s .1s cubic-bezier(.2,.8,.2,1), opacity .7s .1s;
+      display:flex; flex-direction:column; overflow:auto;
+    }
+    .letter-header{
+      display:flex; align-items:center; justify-content:space-between;
+      border-bottom:1px dashed var(--edge);
+      padding-bottom:10px; margin-bottom:10px;
+    }
+    .to{ font-weight:700 }
+    .date{ color:var(--muted); font-size:.9rem }
+    .content{ text-align:left; }
+    .content p{ margin:.6em 0 }
+    .actions{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; justify-content:flex-end }
+    .btn{
+      appearance:none; border:1px solid var(--edge);
+      background: linear-gradient(#fff, #fff5f8);
+      padding:10px 14px; border-radius:10px;
+      font-weight:600; letter-spacing:.02em; cursor:pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background .2s;
+    }
+    .btn:active{ transform: translateY(1px) }
+    .btn.primary{ border-color: transparent; background: linear-gradient(180deg, #ff99bb, var(--rose)); color:#fff; box-shadow: 0 8px 22px rgba(214,51,108,.35) }
+    .envelope.open .flap{ transform: rotateX(180deg) }
+    .envelope.open .seal{ transform: translate(-50%,-50%) scale(0); transition: transform .5s ease }
+    .envelope.open .letter{ transform: translateY(0%); opacity:1 }
+    .confetti i{
+      position:fixed; top:-10vh;
+      width:10px; height:14px; border-radius:2px;
+      opacity:.9; pointer-events:none; z-index:5;
+      animation: fall 3.6s ease-in forwards;
+    }
+    @keyframes fall{
+      to{ transform: translateY(115vh) rotate(720deg) }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .envelope{ transition:none }
+      .flap, .letter{ transition:none }
+      .confetti i{ animation:none }
+    }
+    footer{ color:var(--muted); margin-top:16px; font-size:.85rem }
+    .sr-only{ position:absolute!important; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 class="title">💌 电子信封</h1>
+    <p class="subtitle">轻触信封开启，给 <strong>徐鹏涛</strong> 的一封信</p>
+
+    <div class="scene" aria-live="polite">
+      <div class="envelope" id="envelope" role="button" aria-expanded="false" aria-label="打开信封（轻触）">
+        <div class="flap"></div>
+        <div class="seal" aria-hidden="true">❤</div>
+        <div class="letter" id="letter" tabindex="-1">
+          <div class="letter-header">
+            <div class="to">亲爱的徐鹏涛：</div>
+            <div class="date" id="date"></div>
+          </div>
+          <div class="content" id="content">
+            <p>从我们第一次微信聊天到第一次见面吃饭再到第一次一起去旅行，每一次的“第一次”对我来说都是一个全新的体验。这种体验是区分于朋友的区分于亲人的，是一种独一无二的体验。</p>
+            <p>所以我一直想要将我们的第一次持续拓展下去，第一次一起做饭、第一次一起去迪士尼、第一次一起玩密室、第一次一起一起看日出然后到第一次一起买房、一起装修我们自己的家，我将会成为这个时间上最幸福的人。</p>
+            <p>在认识你之前，我是一个没有具体理想的r，如果有人问我只会说“我想要过一个快乐的人生”，但什么是“快乐的人生”，我没有办法具象的回答这个问题。但认识你之后，我的理想就变得非常具象，也就是和爱的人幸福、平凡、无忧无虑的过完这一生。</p>
+            <p>关于什么是“爱”，我以前也不太明白。从第一次见到你，就对你有好感，是一个积极、主动且很符合我审美的一个男孩子，后来当在宝家过完周末之后，我内心完全确认了：你就是我喜欢的人。</p>
+            <p>认识宝之后我就明白了什么是爱，爱是愿意为对方付出且又不求具体汇报，爱是可以把对方视为自己最宝贵的东西而珍惜的，而真正的爱且是相互的，两个人互相守护彼此。</p>
+            <p>人生是有限的，与你相遇，我很幸运。我想和你一起走完未来的日子，一起经历人生中所有属于我们的第一次。<br>我爱你，所以想和你正式的告白一次，正式的问一下你“愿意做我的男朋友吗”。</p>
+            <p>爱你的郭中方</p>
+          </div>
+          <div class="actions">
+            <button class="btn primary" id="btnCopy">复制全文</button>
+            <button class="btn" id="btnShare">分享此页面</button>
+          </div>
+        </div>
+      </div>
+      <p class="hint">小提示：点按/轻触信封可打开，打开后再次点按信封空白处也可关闭。</p>
+    </div>
+
+    <footer>© <span id="year"></span> 专属 · 只为你打开</footer>
+  </div>
+
+  <div class="confetti" aria-hidden="true"></div>
+
+  <script>
+    // 日期与年份显示
+    const fmt = new Intl.DateTimeFormat('zh-CN', { year:'numeric', month:'long', day:'numeric'});
+    document.getElementById('date').textContent = fmt.format(new Date());
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const envelope = document.getElementById('envelope');
+    const letter = document.getElementById('letter');
+    let opened = false;
+
+    function openEnvelope(){
+      if(opened) return;
+      opened = true;
+      envelope.classList.add('open');
+      envelope.setAttribute('aria-expanded','true');
+      setTimeout(()=> letter.focus({preventScroll:true}), 400);
+      burst();
+      history.replaceState(null, '', location.pathname + location.search + '#open');
+    }
+    function closeEnvelope(){
+      if(!opened) return;
+      opened = false;
+      envelope.classList.remove('open');
+      envelope.setAttribute('aria-expanded','false');
+    }
+
+    envelope.addEventListener('click', (e)=>{
+      // if clicked inside the letter card, ignore close
+      const rect = letter.getBoundingClientRect();
+      const inLetter = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+      if(!opened) openEnvelope();
+      else if(!inLetter) closeEnvelope();
+    });
+    window.addEventListener('keydown', (e)=>{
+      if((e.key === 'Enter' || e.key === ' ') && !opened){ e.preventDefault(); openEnvelope(); }
+      if(e.key === 'Escape' && opened){ closeEnvelope(); }
+    });
+
+    // 如果 URL 带 #open，直接打开
+    if(location.hash === '#open'){ setTimeout(openEnvelope, 350); }
+
+    // 复制全文
+    document.getElementById('btnCopy').addEventListener('click', async ()=>{
+      const text = document.getElementById('content').innerText.trim();
+      try{
+        await navigator.clipboard.writeText(text);
+        toast('已复制到剪贴板');
+      }catch{
+        toast('复制失败，请长按选择文本复制');
+      }
+    });
+
+    // 分享
+    document.getElementById('btnShare').addEventListener('click', async ()=>{
+      const shareData = { title: document.title, text:'一封写给你的信', url: location.href };
+      if(navigator.share){
+        try{ await navigator.share(shareData); }catch{ /* 用户取消 */ }
+      }else{
+        try{
+          await navigator.clipboard.writeText(location.href);
+          toast('已复制链接，可直接粘贴分享');
+        }catch{
+          toast('请手动复制地址栏链接');
+        }
+      }
+    });
+
+    // 简易吐司提示
+    function toast(msg){
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText='position:fixed;left:50%;bottom:14vh;transform:translateX(-50%);background:rgba(0,0,0,.75);color:#fff;padding:10px 14px;border-radius:12px;font-weight:600;z-index:9;';
+      document.body.appendChild(t);
+      setTimeout(()=>{ t.style.transition='opacity .35s'; t.style.opacity='0'; },1400);
+      setTimeout(()=> t.remove(), 1800);
+    }
+
+    // 五彩纸屑
+    function burst(){
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const container = document.querySelector('.confetti');
+      const colors = ['#ff8fab','#ffc2d1','#fde4cf','#cdb4db','#bde0fe','#a8e6cf','#ffd6a5','#fdffb6'];
+      const pieces = 90;
+      for(let i=0;i<pieces;i++){
+        const el = document.createElement('i');
+        const size = 8 + Math.random()*10;
+        el.style.width = size+'px';
+        el.style.height = (size*1.3)+'px';
+        el.style.left = (Math.random()*window.innerWidth)+'px';
+        el.style.background = colors[Math.floor(Math.random()*colors.length)];
+        el.style.transform = 'rotate('+(Math.random()*360)+'deg)';
+        el.style.animationDelay = (Math.random()*0.2)+'s';
+        container.appendChild(el);
+        setTimeout(()=> el.remove(), 4000);
+      }
+    }
+  </script>
+</body>
+</html>
