@@ -57,7 +57,7 @@
       perspective:1200px;
     }
     .envelope{
-      position:relative; width:100%; height:min(52vh,420px);
+      position:relative; width:100%; height:min(66vh,560px); /* ↑ 放大整体高度 */
       background:var(--card); border:2px solid var(--edge);
       border-radius:var(--radius);
       box-shadow: var(--shadow);
@@ -87,15 +87,15 @@
       box-shadow: 0 10px 22px rgba(214,51,108,.35), inset 0 -5px 8px rgba(0,0,0,.16);
       z-index:4;
     }
-    .hint{ color:var(--muted); margin:10px 0 22px; font-size:.95rem; }
+    .hint{ color:var(--muted); margin:10px 0 22px; font-size:.95rem }
     .letter{
-      position:absolute; left:6%; right:6%; bottom:8%; top:50%;
+      position:absolute; left:6%; right:6%; bottom:8%; top:52%; /* 关闭时更靠下 */
       background:var(--card);
       border-radius:12px; padding: 18px 18px 22px;
       box-shadow: 0 8px 24px rgba(0,0,0,.18);
       transform: translateY(70%);
       opacity:0; z-index:2;
-      transition: transform .9s .1s cubic-bezier(.2,.8,.2,1), opacity .7s .1s;
+      transition: transform .9s .1s cubic-bezier(.2,.8,.2,1), opacity .7s .1s, top .9s .1s cubic-bezier(.2,.8,.2,1); /* ↑ 打开时一起过渡 top */
       display:flex; flex-direction:column; overflow:auto;
     }
     .letter-header{
@@ -119,7 +119,7 @@
     .btn.primary{ border-color: transparent; background: linear-gradient(180deg, #ff99bb, var(--rose)); color:#fff; box-shadow: 0 8px 22px rgba(214,51,108,.35) }
     .envelope.open .flap{ transform: rotateX(180deg) }
     .envelope.open .seal{ transform: translate(-50%,-50%) scale(0); transition: transform .5s ease }
-    .envelope.open .letter{ transform: translateY(0%); opacity:1 }
+    .envelope.open .letter{ transform: translateY(0%); opacity:1; top:8%; } /* ↑ 打开后信纸更大，顶部留白 8% */
     .confetti i{
       position:fixed; top:-10vh;
       width:10px; height:14px; border-radius:2px;
@@ -176,9 +176,9 @@
   <div class="confetti" aria-hidden="true"></div>
 
   <script>
-    // 日期与年份显示
-    const fmt = new Intl.DateTimeFormat('zh-CN', { year:'numeric', month:'long', day:'numeric'});
-    document.getElementById('date').textContent = fmt.format(new Date());
+    // 固定日期（按你的要求）
+    document.getElementById('date').textContent = '2025年11月2号';
+    // 年份仍然自动更新
     document.getElementById('year').textContent = new Date().getFullYear();
 
     const envelope = document.getElementById('envelope');
@@ -202,7 +202,7 @@
     }
 
     envelope.addEventListener('click', (e)=>{
-      // if clicked inside the letter card, ignore close
+      // 如果点击在信纸卡片内，则不关闭
       const rect = letter.getBoundingClientRect();
       const inLetter = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
       if(!opened) openEnvelope();
